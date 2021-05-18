@@ -1,24 +1,11 @@
 package configs
 
 import (
-	"time"
-
 	"github.com/BurntSushi/toml"
 )
 
 type tomlConfig struct {
-	Title   string
-	Owner   ownerInfo
-	DB      database `toml:"database"`
-	Servers map[string]server
-	Clients clients
-}
-
-type ownerInfo struct {
-	Name string
-	Org  string `toml:"organization"`
-	Bio  string
-	DOB  time.Time
+	DB database `toml:"database"`
 }
 
 type database struct {
@@ -31,16 +18,6 @@ type database struct {
 	DBName   string `toml:"dbname"`
 }
 
-type server struct {
-	IP string
-	DC string
-}
-
-type clients struct {
-	Data  [][]interface{}
-	Hosts []string
-}
-
 var config tomlConfig
 
 func init() {
@@ -50,6 +27,6 @@ func init() {
 	}
 }
 
-func GetVConfig() tomlConfig {
+func GetConfig() tomlConfig {
 	return config
 }

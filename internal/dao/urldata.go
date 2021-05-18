@@ -14,13 +14,11 @@ var db *gorm.DB
 var err error
 
 func initdb() {
-	mysqlserver := configs.GetVConfig().DB.Server
-	mysqluser := configs.GetVConfig().DB.UserName
-	mysqlpass := configs.GetVConfig().DB.Passwd
-	mysqlport := configs.GetVConfig().DB.Ports
-	mysqldb := configs.GetVConfig().DB.DBName
-
-	//fmt.Println(mysqlserver, mysqluser, mysqlpass, mysqlport, mysqldb)
+	mysqlserver := configs.GetConfig().DB.Server
+	mysqluser := configs.GetConfig().DB.UserName
+	mysqlpass := configs.GetConfig().DB.Passwd
+	mysqlport := configs.GetConfig().DB.Ports
+	mysqldb := configs.GetConfig().DB.DBName
 
 	dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -46,7 +44,7 @@ func DB_AutoMigrate() {
 
 func StoreUrl(shorturl string, longurl string) {
 	initdb()
-	urlmaps := models.UrlMap{ShortUrl: "23233", LongUrl: "sdsdsd"}
+	urlmaps := models.UrlMap{ShortUrl: shorturl, LongUrl: longurl}
 	db.Create(&urlmaps)
 	defer closeDB()
 }

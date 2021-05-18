@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"strconv"
 
+	urldata "ShortUrl/internal/dao"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -78,7 +80,13 @@ func Long2Short(ctx *gin.Context) {
 		return
 	}
 
+	longurl := LongUrl.LongUrl
+	shorturl := "https://leoay.com/?st=" + ShortProcess(longurl)
+
+	urldata.StoreUrl(shorturl, longurl)
+
 	ctx.JSON(200, gin.H{
-		"message": LongUrl.LongUrl,
+		"longurl":  longurl,
+		"shorturl": shorturl,
 	})
 }
