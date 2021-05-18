@@ -1,6 +1,7 @@
 package service
 
 import (
+	urldata "ShortUrl/internal/dao"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
@@ -8,13 +9,10 @@ import (
 	"io/ioutil"
 	"strconv"
 
-	urldata "ShortUrl/internal/dao"
-
 	"github.com/gin-gonic/gin"
 )
 
 func SubString(str string, begin, length int) (substr string) {
-
 	rs := []rune(str)
 	lth := len(rs)
 
@@ -47,12 +45,10 @@ func ShortProcess(longstring string) string {
 	hexstr := hex.EncodeToString(md5s.Sum(nil))
 
 	hexLen := len(hexstr)
-	fmt.Println(hexLen)
 	subHexLen := hexLen / 8
 	var output []string
 	for i := 0; i < subHexLen; i++ {
 		subHex := SubString(hexstr, i*8, 8)
-
 		idx := 0x3FFFFFFF & Hex2Dec(subHex)
 		out := ""
 		for j := 0; j < 6; j++ {
@@ -70,9 +66,7 @@ type LongUrlType struct {
 }
 
 func Long2Short(ctx *gin.Context) {
-
 	data, _ := ioutil.ReadAll(ctx.Request.Body)
-	fmt.Println(string(data))
 	var LongUrl LongUrlType
 	err := json.Unmarshal(data, &LongUrl)
 	if err != nil {
@@ -81,12 +75,13 @@ func Long2Short(ctx *gin.Context) {
 	}
 
 	longurl := LongUrl.LongUrl
-	shorturl := "https://leoay.com/?st=" + ShortProcess(longurl)
+	shorturl := ShortProcess(longurl)
+	fullshorturl := "https://leoay.com/?st=" + shorturl
 
 	urldata.StoreUrl(shorturl, longurl)
 
 	ctx.JSON(200, gin.H{
 		"longurl":  longurl,
-		"shorturl": shorturl,
+		"shorturl": fullshorturl,
 	})
 }

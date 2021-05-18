@@ -59,7 +59,7 @@ func ReadLongUrl(shorturl string) string {
 
 func ReadShortUrl(longurl string) string {
 	initdb()
-	urlmaps := models.UrlMap{ShortUrl: "23233", LongUrl: "sdsdsd"}
+	urlmaps := models.UrlMap{}
 	db.Where("long_url=?", longurl).Find(&urlmaps)
 	defer closeDB()
 	return urlmaps.ShortUrl
