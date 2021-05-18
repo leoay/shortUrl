@@ -1,0 +1,6 @@
+POST http://127.0.0.1:8087/shorturl HTTP/1.1
+Content-Type: application/json
+
+{
+    "longurl": "https://blog.csdn.net/qq_36115340/article/details/111385156"
+}
